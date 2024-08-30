@@ -1,13 +1,17 @@
 package api
 
-import "net/http"
+import (
+	"database/sql"
+	"net/http"
+)
 
 type ApiServer struct {
 	address string
+	db      *sql.DB
 }
 
-func NewApiServer(address string) *ApiServer {
-	return &ApiServer{address: address}
+func NewApiServer(address string, db *sql.DB) *ApiServer {
+	return &ApiServer{address: address, db: db}
 }
 
 func (s *ApiServer) Run() error {
