@@ -91,7 +91,7 @@ func (s *Store) CreateProduct(product dto.CreateProductDto) error {
 }
 
 func (s *Store) UpdateProduct(product models.Product) error {
-	_, err := s.db.Exec("UPDATE products SET name = ?, price = ?, image = ?, description = ?, quantity = ? WHERE id = ?", product.Name, product.Price, product.Image, product.Description, product.Quantity, product.ID)
+	_, err := s.db.Exec("UPDATE products SET name = ?, price = ?, image = ?, description = ?, quantity = ? WHERE id = ?", product.Name, product.Price, product.Image, product.Description, product.Quantity, product.Id)
 	if err != nil {
 		return err
 	}
