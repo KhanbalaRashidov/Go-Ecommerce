@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
@@ -25,4 +26,33 @@ func ParseJSON(r *http.Request, v any) error {
 	}
 
 	return json.NewDecoder(r.Body).Decode(v)
+}
+
+func GetTokenFromRequest(r *http.Request) string {
+	tokenAuth := r.Header.Get("Authorization")
+	tokenQuery := r.URL.Query().Get("token")
+
+	if tokenAuth != "" {
+		return tokenAuth
+	}
+
+	if tokenQuery != "" {
+		return tokenQuery
+	}
+
+	return ""
+}
+
+func HashPassword(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hash), nil
+}
+
+func ComparePasswords(hashed string, plain []byte) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashed), plain)
+	return err == nil
 }

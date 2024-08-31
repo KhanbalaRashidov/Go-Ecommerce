@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/KhanbalaRashidov/Go-Ecommerce/helper"
 	"github.com/KhanbalaRashidov/Go-Ecommerce/models/dto"
+	"github.com/KhanbalaRashidov/Go-Ecommerce/service/auth"
 	"github.com/KhanbalaRashidov/Go-Ecommerce/service/cart"
 	"github.com/go-playground/validator/v10"
 	"net/http"
@@ -37,13 +38,13 @@ func (h *Handler) CheckoutHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	orderID, totalPrice, err := h.createOrder(products, cart.Items, userID)
+	orderID, totalPrice, err := h.CreateOrder(products, cartDto.Items, userID)
 	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, err)
+		helper.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]interface{}{
+	helper.WriteJSON(w, http.StatusOK, map[string]interface{}{
 		"total_price": totalPrice,
 		"order_id":    orderID,
 	})
