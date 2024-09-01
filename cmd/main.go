@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/KhanbalaRashidov/Go-Ecommerce/cmd/api"
 	"github.com/KhanbalaRashidov/Go-Ecommerce/configs"
@@ -26,8 +27,19 @@ func main() {
 		log.Fatal(err)
 	}
 
+	initStorage(db)
+
 	apiServer := api.NewApiServer(fmt.Sprintf(":%s", configs.Envs.Port), db)
 	if err := apiServer.Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func initStorage(db *sql.DB) {
+	err := db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("DB: Successfully connected!")
 }
